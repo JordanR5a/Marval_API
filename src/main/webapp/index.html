@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Generic Marvel API</title>
+<script type="text/javascript">
+function createCharacter() {
+	var id = document.getElementById('character_id');
+	var name = document.getElementById('character_name');
+	var species = document.getElementById('character_species');
+	var character = {
+		"id": id.value,
+		"name": name.value,
+		"species": species.value,
+		"powers" : ["Unknown"]
+	};
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("POST", "/character");
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(JSON.stringify(character));
+}
+function updateCharacter() {
+	var id = document.getElementById('character_id');
+	var name = document.getElementById('character_name');
+	var species = document.getElementById('character_species');
+	var character = {
+		"id": id.value,
+		"name": name.value,
+		"species": species.value,
+		"powers" : ["Unknown"]
+	};
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("PATCH", `/character/${id.value}`);
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(JSON.stringify(character));
+}
+function deleteCharacter() {
+	var id = document.getElementById('character_id');
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("DELETE", `/character/${id.value}`);
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send();
+}
+function createOrganization() {
+	var id = document.getElementById('organization_id');
+	var name = document.getElementById('organization_name');
+	var organization = {
+		"id": id.value,
+		"name": name.value,
+		"members": ["Unknown"]
+	};
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("POST", "/organization");
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(JSON.stringify(organization));
+}
+function updateOrganization() {
+	var id = document.getElementById('organization_id');
+	var name = document.getElementById('organization_name');
+	var organization = {
+		"id": id.value,
+		"name": name.value,
+		"members": ["Unknown"]
+	};
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("PATCH", `/organization/${id.value}`);
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(JSON.stringify(organization));
+}
+function deleteOrganization() {
+	var id = document.getElementById('organization_id');
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("DELETE", `/organization/${id.value}`);
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send();
+}
+function createSpecies() {
+	var id = document.getElementById('species_id');
+	var sciName = document.getElementById('species_sciName');
+	var comName = document.getElementById('species_comName');
+	var bodyType = document.getElementById('species_bodyType');
+	var homeWorld = document.getElementById('species_homeWorld');
+	var species = {
+		"id": id.value,
+		"scientificName": sciName.value,
+		"commonName": comName.value,
+		"bodyType": bodyType.value,
+		"homeWorld": homeWorld.value,
+	};
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("POST", "/species");
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(JSON.stringify(species));
+}
+function updateSpecies() {
+	var id = document.getElementById('species_id');
+	var sciName = document.getElementById('species_sciName');
+	var comName = document.getElementById('species_comName');
+	var bodyType = document.getElementById('species_bodyType');
+	var homeWorld = document.getElementById('species_homeWorld');
+	var species = {
+		"id": id.value,
+		"scientificName": sciName.value,
+		"commonName": comName.value,
+		"bodyType": bodyType.value,
+		"homeWorld": homeWorld.value,
+	};
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("PATCH", `/species/${id.value}`);
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(JSON.stringify(species));
+}
+function deleteSpecies() {
+	var id = document.getElementById('species_id');
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("DELETE", `/species/${id.value}`);
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send();
+}
+function createVehicle() {
+	var id = document.getElementById('vehicle_id');
+	var name = document.getElementById('vehicle_name');
+	var transMethod = document.getElementById('vehicle_transMethod');
+	var owner = document.getElementById('vehicle_owner');
+	var vehicle = {
+		"id": id.value,
+		"name": name.value,
+		"transportMethod": tansMethod.value,
+		"owner": owner.value
+	};
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("POST", "/vehicle");
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(JSON.stringify(vehicle));
+}
+function updateVehicle() {
+	var id = document.getElementById('vehicle_id');
+	var name = document.getElementById('vehicle_name');
+	var transMethod = document.getElementById('vehicle_transMethod');
+	var owner = document.getElementById('vehicle_owner');
+	var vehicle = {
+		"id": id.value,
+		"name": name.value,
+		"transportMethod": tansMethod.value,
+		"owner": owner.value
+	};
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("PATCH", `/vehicle/${id.value}`);
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(JSON.stringify(vehicle));
+}
+function deleteVehicle() {
+	var id = document.getElementById('vehicle_id');
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("DELETE", `/vehicle/${id.value}`);
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send();
+}
+function getCharacters() {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+			var characters = JSON.parse(this.responseText);
+			renderCharacters(characters);
+		}
+	}
+	xmlHttp.open("GET", "/character", true);
+	xmlHttp.send();
+}
+function getOrganizations() {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+			var organizations = JSON.parse(this.responseText);
+			renderOrganizations(organizations);
+		}
+	}
+	xmlHttp.open("GET", "/organization", true);
+	xmlHttp.send();
+}
+function getSpecies() {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+			var species = JSON.parse(this.responseText);
+			renderSpecies(species);
+		}
+	}
+	xmlHttp.open("GET", "/species", true);
+	xmlHttp.send();
+}
+function getVehicles() {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+			var vehicles = JSON.parse(this.responseText);
+			renderVehicles(vehicles);
+		}
+	}
+	xmlHttp.open("GET", "/vehicle", true);
+	xmlHttp.send();
+}
+function renderCharacters(characters) {
+	var item_list = document.getElementById('item_list');
+	item_list.innerHTML = "";
+	for(var character of characters) {
+		var item_html = `<li>ID: ${character.id} | Name: ${character.name} | Species: ${character.species} | Powers: [`;
+		for(var power of character.powers) {
+			item_html += power + " | ";
+		}
+		var finalized_item_html = item_html.slice(0, -3) + "]</li>";
+		item_list.innerHTML += finalized_item_html;
+	}
+}
+function renderOrganizations(organizations) {
+	var item_list = document.getElementById('item_list');
+	item_list.innerHTML = "";
+	for(var organization of organizations) {
+		var item_html = `<li>ID: ${organization.id} | Name: ${organization.name} | Members: [`;
+		for(var member of organization.members) {
+			item_html += member + " | ";
+		}
+		var finalized_item_html = item_html.slice(0, -3) + "]</li>";
+		item_list.innerHTML += finalized_item_html;
+	}
+}
+function renderSpecies(species) {
+	var item_list = document.getElementById('item_list');
+	item_list.innerHTML = "";
+	for(var spec of species) {
+		var item_html = `<li>ID: ${spec.id} | Scientific Name: ${spec.scientificName} | Common Name: ${spec.commonName} | Body Type: ${spec.bodyType} | Home World: ${spec.homeWorld}</li>`;
+		item_list.innerHTML += item_html;
+	}
+}
+function renderVehicles(vehicles) {
+	var item_list = document.getElementById('item_list');
+	item_list.innerHTML = "";
+	for(var vehicle of vehicles) {
+		var item_html = `<li>ID: ${vehicle.id} | Name: ${vehicle.name} | Transporation Method: ${vehicle.transportMethod} | Owner: ${vehicle.owner}</li>`;
+		item_list.innerHTML += item_html;
+	}
+}
+window.onload = function() {
+	//getVehicles();
+}
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="form">
+		<form onsubmit="return false;">
+			<label>id</label> 
+				<input type="text" id="character_id" /> <br /> 
+			<label>name</label>
+				<input type="text" id="character_name" /> <br />
+			<label>species</label>
+				<input type="text" id="character_species" /> <br />  
+			<button onclick="createCharacter();">Add Character</button>
+			<button onClick="updateCharacter();">Update Character</button>
+			<button onClick="deleteCharacter();">Delete Character</button>
+		</form>
+	</div>
+	<div class="form">
+		<form onsubmit="return false;">
+			<label>id</label> 
+				<input type="text" id="organization_id" /> <br /> 
+			<label>name</label>
+				<input type="text" id="organization_name" /> <br />
+			<button onclick="createOrganization();">Add Organization</button>
+			<button onClick="updateOrganization();">Update Organization</button>
+			<button onClick="deleteOrganization();">Delete Organization</button>
+		</form>
+	</div>
+	<div class="form">
+		<form onsubmit="return false;">
+			<label>id</label> 
+				<input type="text" id="species_id" /> <br /> 
+			<label>Scientific Name</label>
+				<input type="text" id="species_sciName" /> <br /> 
+			<label>Common Name</label>
+				<input type="text" id="species_comName" /> <br /> 
+			<label>Body Type</label>
+				<input type="text" id="species_bodyType" /> <br />
+			<label>Home World</label>
+				<input type="text" id="species_homeWorld" /> <br />  
+			<button onclick="createSpecies();">Add Species</button>
+			<button onClick="updateSpecies();">Update Species</button>
+			<button onClick="deleteSpecies();">Delete Species</button>
+		</form>
+	</div>
+	<div class="form">
+		<form onsubmit="return false;">
+			<label>id</label> 
+				<input type="text" id="vehicle_id" /> <br /> 
+			<label>name</label>
+				<input type="text" id="vehicle_name" /> <br />
+			<label>Transportation Method</label>
+				<input type="text" id="vehicle_transMethod" /> <br />  
+			<label>Owner</label>
+				<input type="text" id="vehicle_owner" /> <br />  
+			<button onclick="createVehicle();">Add Vehicle</button>
+			<button onClick="updateVehicle();">Update Vehicle</button>
+			<button onClick="deleteVehicle();">Delete Vehicle</button>
+		</form>
+	</div>
+	<div class="buttonDislay">
+		<button onClick="getCharacters();">Show Characters</button>
+		<button onClick="getOrganizations();">Show Organizations</button>
+		<button onClick="getSpecies();">Show Species</button>
+		<button onClick="getVehicles();">Show Vehicles</button>
+	</div>
+	<div>
+		<ul id="item_list">
+		</ul>
+	</div>
+</body>
+</html>
