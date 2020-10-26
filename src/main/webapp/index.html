@@ -17,6 +17,12 @@ function createCharacter() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("POST", "/character");
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	
+	var username = document.getElementById('login_username');
+	var password = document .getElementById('login_password');
+	console.log(`Basic ${window.btoa(username.value)}:${window.btoa(password.value)}`);
+	xmlHttp.setRequestHeader('Authorization', `Basic ${window.btoa(username.value)}:${window.btoa(password.value)}`);
+	
 	xmlHttp.send(JSON.stringify(character));
 }
 function updateCharacter() {
@@ -240,6 +246,11 @@ function renderVehicles(vehicles) {
 		item_list.innerHTML += item_html;
 	}
 }
+function Authenticate(xmlHttp) {
+	var username = document.getElementById('login_username');
+	var password = document .getElementById('login_password');
+	xmlHttp.setRequestHeader('Authorization', `Basic ${window.btoa(username.value)}:${window.btoa(password.value)}`);
+}
 window.onload = function() {
 	//getVehicles();
 }
@@ -247,6 +258,14 @@ window.onload = function() {
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+	<div class="auth">
+		<form onsubmit="return false;">
+			<label>Username</label>
+				<input type="text" id="login_username" /> <br />
+			<label>Password</label>
+				<input type="password" id="login_password" /> <br />
+		</form>
+	</div>
 	<div class="form">
 		<form onsubmit="return false;">
 			<label>id</label> 
