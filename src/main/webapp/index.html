@@ -17,12 +17,7 @@ function createCharacter() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("POST", "/character");
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	
-	var username = document.getElementById('login_username');
-	var password = document .getElementById('login_password');
-	console.log(`Basic ${window.btoa(username.value)}:${window.btoa(password.value)}`);
-	xmlHttp.setRequestHeader('Authorization', `Basic ${window.btoa(username.value)}:${window.btoa(password.value)}`);
-	
+	Authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(character));
 }
 function updateCharacter() {
@@ -38,6 +33,7 @@ function updateCharacter() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("PATCH", `/character/${id.value}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(character));
 }
 function deleteCharacter() {
@@ -45,6 +41,7 @@ function deleteCharacter() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("DELETE", `/character/${id.value}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send();
 }
 function createOrganization() {
@@ -58,6 +55,7 @@ function createOrganization() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("POST", "/organization");
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(organization));
 }
 function updateOrganization() {
@@ -71,6 +69,7 @@ function updateOrganization() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("PATCH", `/organization/${id.value}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(organization));
 }
 function deleteOrganization() {
@@ -78,6 +77,7 @@ function deleteOrganization() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("DELETE", `/organization/${id.value}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send();
 }
 function createSpecies() {
@@ -96,6 +96,7 @@ function createSpecies() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("POST", "/species");
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(species));
 }
 function updateSpecies() {
@@ -114,6 +115,7 @@ function updateSpecies() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("PATCH", `/species/${id.value}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(species));
 }
 function deleteSpecies() {
@@ -121,6 +123,7 @@ function deleteSpecies() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("DELETE", `/species/${id.value}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send();
 }
 function createVehicle() {
@@ -137,6 +140,7 @@ function createVehicle() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("POST", "/vehicle");
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(vehicle));
 }
 function updateVehicle() {
@@ -153,6 +157,7 @@ function updateVehicle() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("PATCH", `/vehicle/${id.value}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(vehicle));
 }
 function deleteVehicle() {
@@ -160,6 +165,7 @@ function deleteVehicle() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("DELETE", `/vehicle/${id.value}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	Authenticate(xmlHttp);
 	xmlHttp.send();
 }
 function getCharacters() {
@@ -247,9 +253,9 @@ function renderVehicles(vehicles) {
 	}
 }
 function Authenticate(xmlHttp) {
-	var username = document.getElementById('login_username');
-	var password = document .getElementById('login_password');
-	xmlHttp.setRequestHeader('Authorization', `Basic ${window.btoa(username.value)}:${window.btoa(password.value)}`);
+	var username = document.getElementById('login_username').value;
+	var password = document .getElementById('login_password').value;
+	xmlHttp.setRequestHeader('Authorization', `Basic ${window.btoa(username + ":" + password)}`);
 }
 window.onload = function() {
 	//getVehicles();
