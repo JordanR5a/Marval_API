@@ -43,7 +43,7 @@ public class SpeciesRestController {
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public List<Species> findAllSpecies() throws FileNotFoundException, IOException {
-		return repo.findAll().stream().sorted()
+		return repo.findAll().stream()
 				.collect(Collectors.toList());
 	}
 

@@ -4,212 +4,44 @@
 <meta charset="ISO-8859-1">
 <title>Generic Marvel API</title>
 <script type="text/javascript">
-function createCharacter() {
-	var id = document.getElementById('character_id');
-	var name = document.getElementById('character_name');
-	var species = document.getElementById('character_species');
-	var character = {
-		"id": id.value,
-		"name": name.value,
-		"species": species.value,
-		"powers" : ["Unknown"]
-	};
+function createObj(url, obj) {
 	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("POST", "/character");
+	xmlHttp.open("POST", url);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
 	Authenticate(xmlHttp);
-	xmlHttp.send(JSON.stringify(character));
+	xmlHttp.send(JSON.stringify(obj));
 }
-function updateCharacter() {
-	var id = document.getElementById('character_id');
-	var name = document.getElementById('character_name');
-	var species = document.getElementById('character_species');
-	var character = {
-		"id": id.value,
-		"name": name.value,
-		"species": species.value,
-		"powers" : ["Unknown"]
-	};
+function updateObj(url, obj) {
 	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("PATCH", `/character/${id.value}`);
+	xmlHttp.open("PATCH", `${url}/${obj.id}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
 	Authenticate(xmlHttp);
-	xmlHttp.send(JSON.stringify(character));
+	xmlHttp.send(JSON.stringify(obj));
 }
-function deleteCharacter() {
-	var id = document.getElementById('character_id');
+function deleteObj(url, id) {
 	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("DELETE", `/character/${id.value}`);
+	xmlHttp.open("DELETE", `${url}/${id}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
 	Authenticate(xmlHttp);
 	xmlHttp.send();
 }
-function createOrganization() {
-	var id = document.getElementById('organization_id');
-	var name = document.getElementById('organization_name');
-	var organization = {
-		"id": id.value,
-		"name": name.value,
-		"members": ["Unknown"]
-	};
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("POST", "/organization");
-	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
-	xmlHttp.send(JSON.stringify(organization));
-}
-function updateOrganization() {
-	var id = document.getElementById('organization_id');
-	var name = document.getElementById('organization_name');
-	var organization = {
-		"id": id.value,
-		"name": name.value,
-		"members": ["Unknown"]
-	};
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("PATCH", `/organization/${id.value}`);
-	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
-	xmlHttp.send(JSON.stringify(organization));
-}
-function deleteOrganization() {
-	var id = document.getElementById('organization_id');
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("DELETE", `/organization/${id.value}`);
-	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
-	xmlHttp.send();
-}
-function createSpecies() {
-	var id = document.getElementById('species_id');
-	var sciName = document.getElementById('species_sciName');
-	var comName = document.getElementById('species_comName');
-	var bodyType = document.getElementById('species_bodyType');
-	var homeWorld = document.getElementById('species_homeWorld');
-	var species = {
-		"id": id.value,
-		"scientificName": sciName.value,
-		"commonName": comName.value,
-		"bodyType": bodyType.value,
-		"homeWorld": homeWorld.value,
-	};
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("POST", "/species");
-	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
-	xmlHttp.send(JSON.stringify(species));
-}
-function updateSpecies() {
-	var id = document.getElementById('species_id');
-	var sciName = document.getElementById('species_sciName');
-	var comName = document.getElementById('species_comName');
-	var bodyType = document.getElementById('species_bodyType');
-	var homeWorld = document.getElementById('species_homeWorld');
-	var species = {
-		"id": id.value,
-		"scientificName": sciName.value,
-		"commonName": comName.value,
-		"bodyType": bodyType.value,
-		"homeWorld": homeWorld.value,
-	};
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("PATCH", `/species/${id.value}`);
-	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
-	xmlHttp.send(JSON.stringify(species));
-}
-function deleteSpecies() {
-	var id = document.getElementById('species_id');
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("DELETE", `/species/${id.value}`);
-	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
-	xmlHttp.send();
-}
-function createVehicle() {
-	var id = document.getElementById('vehicle_id');
-	var name = document.getElementById('vehicle_name');
-	var transMethod = document.getElementById('vehicle_transMethod');
-	var owner = document.getElementById('vehicle_owner');
-	var vehicle = {
-		"id": id.value,
-		"name": name.value,
-		"transportMethod": tansMethod.value,
-		"owner": owner.value
-	};
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("POST", "/vehicle");
-	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
-	xmlHttp.send(JSON.stringify(vehicle));
-}
-function updateVehicle() {
-	var id = document.getElementById('vehicle_id');
-	var name = document.getElementById('vehicle_name');
-	var transMethod = document.getElementById('vehicle_transMethod');
-	var owner = document.getElementById('vehicle_owner');
-	var vehicle = {
-		"id": id.value,
-		"name": name.value,
-		"transportMethod": tansMethod.value,
-		"owner": owner.value
-	};
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("PATCH", `/vehicle/${id.value}`);
-	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
-	xmlHttp.send(JSON.stringify(vehicle));
-}
-function deleteVehicle() {
-	var id = document.getElementById('vehicle_id');
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("DELETE", `/vehicle/${id.value}`);
-	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
-	xmlHttp.send();
-}
-function getCharacters() {
+function getObjs(url) {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-			var characters = JSON.parse(this.responseText);
-			renderCharacters(characters);
+			var objs = JSON.parse(this.responseText);
+			if (url == "/character") {
+				renderCharacters(objs);
+			} else if (url == "/organization") {
+				renderOrganizations(objs);
+			} else if (url == "/species") {
+				renderSpecies(objs);
+			} else if (url == "/vehicle") {
+				renderVehicles(objs);
+			}
 		}
 	}
-	xmlHttp.open("GET", "/character", true);
-	xmlHttp.send();
-}
-function getOrganizations() {
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-			var organizations = JSON.parse(this.responseText);
-			renderOrganizations(organizations);
-		}
-	}
-	xmlHttp.open("GET", "/organization", true);
-	xmlHttp.send();
-}
-function getSpecies() {
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-			var species = JSON.parse(this.responseText);
-			renderSpecies(species);
-		}
-	}
-	xmlHttp.open("GET", "/species", true);
-	xmlHttp.send();
-}
-function getVehicles() {
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-			var vehicles = JSON.parse(this.responseText);
-			renderVehicles(vehicles);
-		}
-	}
-	xmlHttp.open("GET", "/vehicle", true);
+	xmlHttp.open("GET", url, true);
 	xmlHttp.send();
 }
 function renderCharacters(characters) {
@@ -258,7 +90,7 @@ function Authenticate(xmlHttp) {
 	xmlHttp.setRequestHeader('Authorization', `Basic ${window.btoa(username + ":" + password)}`);
 }
 window.onload = function() {
-	//getVehicles();
+	
 }
 </script>
 <link rel="stylesheet" href="style.css">
@@ -280,9 +112,9 @@ window.onload = function() {
 				<input type="text" id="character_name" /> <br />
 			<label>species</label>
 				<input type="text" id="character_species" /> <br />  
-			<button onclick="createCharacter();">Add Character</button>
-			<button onClick="updateCharacter();">Update Character</button>
-			<button onClick="deleteCharacter();">Delete Character</button>
+			<button onclick="createObj('/character', { 'id': document.getElementById('character_id').value, 'name': document.getElementById('character_name').value, 'species': document.getElementById('character_species').value, 'powers' : ['Unknown'] });">Add Character</button>
+			<button onClick="updateObj('/character', { 'id': document.getElementById('character_id').value, 'name': document.getElementById('character_name').value, 'species': document.getElementById('character_species').value, 'powers' : ['Unknown'] });">Update Character</button>
+			<button onClick="deleteObj('/character', document.getElementById('character_id').value);">Delete Character</button>
 		</form>
 	</div>
 	<div class="form">
@@ -291,9 +123,9 @@ window.onload = function() {
 				<input type="text" id="organization_id" /> <br /> 
 			<label>name</label>
 				<input type="text" id="organization_name" /> <br />
-			<button onclick="createOrganization();">Add Organization</button>
-			<button onClick="updateOrganization();">Update Organization</button>
-			<button onClick="deleteOrganization();">Delete Organization</button>
+			<button onclick="createObj('/organization', { 'id': document.getElementById('organization_id').value, 'name': document.getElementById('organization_name').value, 'members': ['Unknown'] });">Add Organization</button>
+			<button onClick="updateObj('/organization', { 'id': document.getElementById('organization_id').value, 'name': document.getElementById('organization_name').value, 'members': ['Unknown'] });">Update Organization</button>
+			<button onClick="deleteObj('/organization', document.getElementById('organization_id').value);">Delete Organization</button>
 		</form>
 	</div>
 	<div class="form">
@@ -308,9 +140,9 @@ window.onload = function() {
 				<input type="text" id="species_bodyType" /> <br />
 			<label>Home World</label>
 				<input type="text" id="species_homeWorld" /> <br />  
-			<button onclick="createSpecies();">Add Species</button>
-			<button onClick="updateSpecies();">Update Species</button>
-			<button onClick="deleteSpecies();">Delete Species</button>
+			<button onclick="createObj('/species', { 'id': document.getElementById('species_id').value, 'scientificName': document.getElementById('species_sciName').value, 'commonName': document.getElementById('species_comName').value, 'bodyType': document.getElementById('species_bodyType').value, 'homeWorld': document.getElementById('species_homeWorld').value });">Add Species</button>
+			<button onClick="updateObj('/species', { 'id': document.getElementById('species_id').value, 'scientificName': document.getElementById('species_sciName').value, 'commonName': document.getElementById('species_comName').value, 'bodyType': document.getElementById('species_bodyType').value, 'homeWorld': document.getElementById('species_homeWorld').value });">Update Species</button>
+			<button onClick="deleteObj('/species', document.getElementById('species_id').value);">Delete Species</button>
 		</form>
 	</div>
 	<div class="form">
@@ -323,16 +155,16 @@ window.onload = function() {
 				<input type="text" id="vehicle_transMethod" /> <br />  
 			<label>Owner</label>
 				<input type="text" id="vehicle_owner" /> <br />  
-			<button onclick="createVehicle();">Add Vehicle</button>
-			<button onClick="updateVehicle();">Update Vehicle</button>
-			<button onClick="deleteVehicle();">Delete Vehicle</button>
+			<button onclick="createObj('/vehicle', { 'id': document.getElementById('vehicle_id').value, 'name': document.getElementById('vehicle_name').value, 'transportMethod': document.getElementById('vehicle_transMethod').value, 'owner': document.getElementById('vehicle_owner').value });">Add Vehicle</button>
+			<button onClick="updateObj('/vehicle', { 'id': document.getElementById('vehicle_id').value, 'name': document.getElementById('vehicle_name').value, 'transportMethod': document.getElementById('vehicle_transMethod').value, 'owner': document.getElementById('vehicle_owner').value });">Update Vehicle</button>
+			<button onClick="deleteObj('/vehicle', document.getElementById('vehicle_id').value);">Delete Vehicle</button>
 		</form>
 	</div>
 	<div class="buttonDislay">
-		<button onClick="getCharacters();">Show Characters</button>
-		<button onClick="getOrganizations();">Show Organizations</button>
-		<button onClick="getSpecies();">Show Species</button>
-		<button onClick="getVehicles();">Show Vehicles</button>
+		<button onClick="getObjs('/character');">Show Characters</button>
+		<button onClick="getObjs('/organization');">Show Organizations</button>
+		<button onClick="getObjs('/species');">Show Species</button>
+		<button onClick="getObjs('/vehicle');">Show Vehicles</button>
 	</div>
 	<div>
 		<ul id="item_list">

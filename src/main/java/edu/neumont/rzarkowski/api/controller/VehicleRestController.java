@@ -43,7 +43,7 @@ public class VehicleRestController {
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public List<Vehicle> findAllVehicles() throws FileNotFoundException, IOException {
-		return repo.findAll().stream().sorted()
+		return repo.findAll().stream()
 				.collect(Collectors.toList());
 	}
 
