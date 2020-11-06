@@ -1,5 +1,10 @@
 @charset "ISO-8859-1";
 
+.auth {
+	margin-top: 10px;
+  	margin-bottom: 10px;
+}
+
 .form {
 	margin-top: 10px;
   	margin-bottom: 10px;
@@ -7,4 +12,8 @@
 
 .buttonDisplay {
 	display: inline;
+}
+
+#CUD {
+	display: none;
 }

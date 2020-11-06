@@ -4,26 +4,45 @@
 <meta charset="ISO-8859-1">
 <title>Generic Marvel API</title>
 <script type="text/javascript">
+
+var display = null;
+
 function createObj(url, obj) {
 	var xmlHttp = new XMLHttpRequest();
+	decideResponse(xmlHttp);
 	xmlHttp.open("POST", url);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
+	authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(obj));
 }
 function updateObj(url, obj) {
 	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("PATCH", `${url}/${obj.id}`);
+	decideResponse(xmlHttp);
+	xmlHttp.open("PATCH", url);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
+	authenticate(xmlHttp);
 	xmlHttp.send(JSON.stringify(obj));
 }
 function deleteObj(url, id) {
 	var xmlHttp = new XMLHttpRequest();
+	decideResponse(xmlHttp);
 	xmlHttp.open("DELETE", `${url}/${id}`);
 	xmlHttp.setRequestHeader('Content-Type', 'application/json');
-	Authenticate(xmlHttp);
+	authenticate(xmlHttp);
 	xmlHttp.send();
+}
+function decideResponse(xmlHttp) {
+	xmlHttp.onreadystatechange = function() {
+		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+			display.innerText = "Data successfully created.";
+		} else if (this.readyState == XMLHttpRequest.DONE && this.status == 401) {
+			display.innerText = "Unauthorized access.";
+		} else if (this.readyState == XMLHttpRequest.DONE && this.status == 403) {
+			display.innerText = "This action is forbidden.";
+		} else {
+			display.innerText = "Something has gone very, very wrong...";
+		}
+	};
 }
 function getObjs(url) {
 	var xmlHttp = new XMLHttpRequest();
@@ -39,6 +58,13 @@ function getObjs(url) {
 			} else if (url == "/vehicle") {
 				renderVehicles(objs);
 			}
+			display.innerText = "";
+		} else if (this.readyState == XMLHttpRequest.DONE && this.status == 401) {
+			display.innerText = "Unauthorized access.";
+		} else if (this.readyState == XMLHttpRequest.DONE && this.status == 403) {
+			display.innerText = "This action is forbidden.";
+		} else {
+			display.innerText = "No data can be found.";
 		}
 	}
 	xmlHttp.open("GET", url, true);
@@ -84,27 +110,58 @@ function renderVehicles(vehicles) {
 		item_list.innerHTML += item_html;
 	}
 }
-function Authenticate(xmlHttp) {
+function authenticate(xmlHttp) {
 	var username = document.getElementById('login_username').value;
 	var password = document .getElementById('login_password').value;
 	xmlHttp.setRequestHeader('Authorization', `Basic ${window.btoa(username + ":" + password)}`);
 }
-window.onload = function() {
-	
+function login() {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("GET", "/user/exists");
+	authenticate(xmlHttp);
+	xmlHttp.onreadystatechange = function() {
+		if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+			document.getElementById('CUD').style.display = 'block';
+			document.getElementById('login_form').style.display = 'none';
+			display.innerText = 'Welcome to the Genric Marvel API';
+		} else {
+			document.getElementById('CUD').style.display = 'none';
+			display.innerText = 'Incorrect login, please try again.';
+		}
+	}
+	xmlHttp.send();
 }
+window.onload = function() { display = document.getElementById('display') };
 </script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div class="auth">
+	<div>
+		<h2 id="display"></h2>
+	</div>
+	<div id="login_form" class="auth">
 		<form onsubmit="return false;">
 			<label>Username</label>
 				<input type="text" id="login_username" /> <br />
 			<label>Password</label>
 				<input type="password" id="login_password" /> <br />
+				<button onClick="login();">Login</button>
 		</form>
 	</div>
-	<div class="form">
+	<div id="CUD">
+		<div id="user_creation_form">
+		<form onsubmit="return false;">
+			<label>Username</label>
+				<input type="text" id="new_username" /> <br />
+			<label>Password</label>
+				<input type="password" id="new_password" /> <br />
+			<label>Authorities</label>
+				<input type="text" id="new_auths" /> <br />
+			<button onClick="createObj('/user', { 'username': document.getElementById('new_username').value, 'password': document.getElementById('new_password').value, 'authorities': document.getElementById('new_auths').value.split(' ').map(auth => auth.toUpperCase()) });">Add User</button>
+			<button onClick="updateObj('user/grant', { 'username': document.getElementById('new_username').value, 'authority': document.getElementById('new_auths').value.toUpperCase() });">Grant Authority</button>
+		</form>
+		</div>
+		<div class="form">
 		<form onsubmit="return false;">
 			<label>id</label> 
 				<input type="text" id="character_id" /> <br /> 
@@ -112,8 +169,8 @@ window.onload = function() {
 				<input type="text" id="character_name" /> <br />
 			<label>species</label>
 				<input type="text" id="character_species" /> <br />  
-			<button onclick="createObj('/character', { 'id': document.getElementById('character_id').value, 'name': document.getElementById('character_name').value, 'species': document.getElementById('character_species').value, 'powers' : ['Unknown'] });">Add Character</button>
-			<button onClick="updateObj('/character', { 'id': document.getElementById('character_id').value, 'name': document.getElementById('character_name').value, 'species': document.getElementById('character_species').value, 'powers' : ['Unknown'] });">Update Character</button>
+			<button onClick="createObj('/character', { 'id': document.getElementById('character_id').value, 'name': document.getElementById('character_name').value, 'species': document.getElementById('character_species').value, 'powers' : ['Unknown'] });">Add Character</button>
+			<button onClick="updateObj('/character/' + document.getElementById('character_id').value, { 'id': document.getElementById('character_id').value, 'name': document.getElementById('character_name').value, 'species': document.getElementById('character_species').value, 'powers' : ['Unknown'] });">Update Character</button>
 			<button onClick="deleteObj('/character', document.getElementById('character_id').value);">Delete Character</button>
 		</form>
 	</div>
@@ -123,8 +180,8 @@ window.onload = function() {
 				<input type="text" id="organization_id" /> <br /> 
 			<label>name</label>
 				<input type="text" id="organization_name" /> <br />
-			<button onclick="createObj('/organization', { 'id': document.getElementById('organization_id').value, 'name': document.getElementById('organization_name').value, 'members': ['Unknown'] });">Add Organization</button>
-			<button onClick="updateObj('/organization', { 'id': document.getElementById('organization_id').value, 'name': document.getElementById('organization_name').value, 'members': ['Unknown'] });">Update Organization</button>
+			<button onClick="createObj('/organization', { 'id': document.getElementById('organization_id').value, 'name': document.getElementById('organization_name').value, 'members': ['Unknown'] });">Add Organization</button>
+			<button onClick="updateObj('/organization' + document.getElementById('organization_id').value, { 'id': document.getElementById('organization_id').value, 'name': document.getElementById('organization_name').value, 'members': ['Unknown'] });">Update Organization</button>
 			<button onClick="deleteObj('/organization', document.getElementById('organization_id').value);">Delete Organization</button>
 		</form>
 	</div>
@@ -140,8 +197,8 @@ window.onload = function() {
 				<input type="text" id="species_bodyType" /> <br />
 			<label>Home World</label>
 				<input type="text" id="species_homeWorld" /> <br />  
-			<button onclick="createObj('/species', { 'id': document.getElementById('species_id').value, 'scientificName': document.getElementById('species_sciName').value, 'commonName': document.getElementById('species_comName').value, 'bodyType': document.getElementById('species_bodyType').value, 'homeWorld': document.getElementById('species_homeWorld').value });">Add Species</button>
-			<button onClick="updateObj('/species', { 'id': document.getElementById('species_id').value, 'scientificName': document.getElementById('species_sciName').value, 'commonName': document.getElementById('species_comName').value, 'bodyType': document.getElementById('species_bodyType').value, 'homeWorld': document.getElementById('species_homeWorld').value });">Update Species</button>
+			<button onClick="createObj('/species', { 'id': document.getElementById('species_id').value, 'scientificName': document.getElementById('species_sciName').value, 'commonName': document.getElementById('species_comName').value, 'bodyType': document.getElementById('species_bodyType').value, 'homeWorld': document.getElementById('species_homeWorld').value });">Add Species</button>
+			<button onClick="updateObj('/species' + document.getElementById('species_id').value, { 'id': document.getElementById('species_id').value, 'scientificName': document.getElementById('species_sciName').value, 'commonName': document.getElementById('species_comName').value, 'bodyType': document.getElementById('species_bodyType').value, 'homeWorld': document.getElementById('species_homeWorld').value });">Update Species</button>
 			<button onClick="deleteObj('/species', document.getElementById('species_id').value);">Delete Species</button>
 		</form>
 	</div>
@@ -155,10 +212,11 @@ window.onload = function() {
 				<input type="text" id="vehicle_transMethod" /> <br />  
 			<label>Owner</label>
 				<input type="text" id="vehicle_owner" /> <br />  
-			<button onclick="createObj('/vehicle', { 'id': document.getElementById('vehicle_id').value, 'name': document.getElementById('vehicle_name').value, 'transportMethod': document.getElementById('vehicle_transMethod').value, 'owner': document.getElementById('vehicle_owner').value });">Add Vehicle</button>
-			<button onClick="updateObj('/vehicle', { 'id': document.getElementById('vehicle_id').value, 'name': document.getElementById('vehicle_name').value, 'transportMethod': document.getElementById('vehicle_transMethod').value, 'owner': document.getElementById('vehicle_owner').value });">Update Vehicle</button>
+			<button onClick="createObj('/vehicle', { 'id': document.getElementById('vehicle_id').value, 'name': document.getElementById('vehicle_name').value, 'transportMethod': document.getElementById('vehicle_transMethod').value, 'owner': document.getElementById('vehicle_owner').value });">Add Vehicle</button>
+			<button onClick="updateObj('/vehicle' + document.getElementById('vehicle_id').value, { 'id': document.getElementById('vehicle_id').value, 'name': document.getElementById('vehicle_name').value, 'transportMethod': document.getElementById('vehicle_transMethod').value, 'owner': document.getElementById('vehicle_owner').value });">Update Vehicle</button>
 			<button onClick="deleteObj('/vehicle', document.getElementById('vehicle_id').value);">Delete Vehicle</button>
 		</form>
+	</div>
 	</div>
 	<div class="buttonDislay">
 		<button onClick="getObjs('/character');">Show Characters</button>
